@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Clientes - SGCP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><h1>Gerenciar Clientes</h1></header>
+<nav>
+    <a href="index.html">Início</a>
+    <a href="clientes.html">Gerenciar Clientes</a>
+    <a href="pedidos.html">Gerenciar Pedidos</a>
+    <a href="relatorio_pedidos_clientes.html">Relatório Pedidos/Clientes</a>
+</nav>
+<main style="padding: 0;">
+    <section id="form-cliente-section">
+        <h2>Adicionar/Editar Cliente</h2>
+        <form id="formCliente">
+            <input type="hidden" id="clienteId">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div>
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone">
+            </div>
+            <button type="submit">Salvar Cliente</button>
+            <button type="button" id="cancelEditCliente" style="display:none;">Cancelar Edição</button>
+        </form>
+    </section>
+
+    <section id="lista-clientes-section">
+        <h2>Lista de Clientes Cadastrados</h2>
+        <table id="tabelaClientes">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
+</main>
+<footer><p>&copy; 2025 - Sistema Gerenciador de Clientes e Pedidos </p></footer>
+<script src="js/app.js"></script>
+</body>
+</html>
