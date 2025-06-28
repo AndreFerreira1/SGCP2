@@ -5,107 +5,108 @@ body {
     background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
-
     background-color: #909193;
     color: #fff;
-    padding: 1rem 0;
+    padding: 1rem;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 31px;
+    gap: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
 .icon-logo {
     background-image: url("../img/img2.png");
-   width: 89px;
-       height: 81px;
-       background-size: cover;
-       background-repeat: no-repeat;
-       background-position: center;
+    width: 70px;
+    height: 65px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 header h1 {
     margin: 0;
+    font-size: 1.5rem;
 }
 
 nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #fda400;
-    padding: 0.5rem;
-    text-align: center;
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
 }
 
 nav a {
     color: #fff;
-    margin: 0 1rem;
+    margin: 0.25rem 0.5rem;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 nav a:hover, nav a.active {
     background-color: #555;
-    border-radius: 5px;
+}
+
+main, .main-index {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    flex-grow: 1;
+}
+
+.main-index {
+    display: flex;
+    padding: 0;
+    overflow: hidden;
 }
 
 #imgfundo {
-padding: 0;
+    padding: 0;
     width: 50%;
-    height: 100%;
-
-}
-.img-form {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-              url("../img/img1.jpg");
-    width: 100%;
-    height: 500px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("../img/img1.jpg");
     background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      padding: 0;
-}
-.main-index {
+    background-position: center;
     display: flex;
-    PADDING: 1REM;
-    max-width: 960px;
-    margin: 20px auto;
-    background-color: #FFF;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
 }
-main {
-         PADDING: 14REM;
-         max-width: 960px;
-         margin: 20px auto;
-         background-color: #FFF;
-         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.text {
-text-align: center;
 
+#imgfundo .text {
+    padding: 2rem;
 }
-.cadastro-link {
 
+#imgfundo h1, #imgfundo h2 {
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
-section {
 
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-
-}
 #form-login {
     width: 50%;
-    background-color: ;
-
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-h2, h1 {
-    color: #000;
-
-    padding-bottom: 0.5rem;
-    margin-top: 0;
+section {
+    margin-bottom: 2rem;
 }
 
 form div {
@@ -123,45 +124,35 @@ input[type="email"],
 input[type="tel"],
 input[type="date"],
 input[type="number"],
+input[type="password"],
 select {
-       width: calc(60% - 20px);
-       padding: 2px;
-       margin-bottom: 0px;
-       border: 1px solid #ddd;
-       border-radius: 4px;
-       box-sizing: border-box;
-   }
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
-
-button {
+button, .button-submit {
     background-color: #5cb85c;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
     margin-right: 0.5rem;
+    transition: background-color 0.3s;
 }
 
-button:hover {
+button:hover, .button-submit:hover {
     background-color: #4cae4c;
 }
 
-button[type="button"] {
-    background-color: #f0ad4e;
-}
-button[type="button"]:hover {
-    background-color: #eea236;
-}
-
-button.delete-btn {
-    background-color: #d9534f;
-}
-button.delete-btn:hover {
-    background-color: #c9302c;
-}
-
+button.delete-btn { background-color: #d9534f; }
+button.delete-btn:hover { background-color: #c9302c; }
+button#cancelEditCliente { background-color: #f0ad4e; }
+button#cancelEditCliente:hover { background-color: #eea236; }
 
 table {
     width: 100%;
@@ -176,7 +167,7 @@ th, td {
 }
 
 th {
-    background-color: #f0f0f0;
+    background-color: #f8f9fa;
     font-weight: bold;
 }
 
@@ -190,8 +181,98 @@ tbody tr:hover {
 
 footer {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     background-color: #909193;
     color: #fff;
-    margin-top: 2rem;
+    margin-top: auto;
+}
+
+.page-title {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-left: 5px solid #007bff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.kpi-card h3 {
+    margin-top: 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.kpi-card p {
+    margin-bottom: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.kpi-card:nth-child(2) { border-left-color: #28a745; }
+.kpi-card:nth-child(3) { border-left-color: #ffc107; }
+
+.chart-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-container h3 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+nav .user-info {
+    color: #fff;
+    margin-right: auto;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    align-self: center;
+}
+
+#logout-link {
+    background-color: #dc3545;
+}
+
+#logout-link:hover {
+    background-color: #c82333;
+}
+
+#password-strength-meter {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    height: 30px;
+}
+
+.strength-bar {
+    height: 5px;
+    width: 0%;
+    background-color: #ddd;
+    border-radius: 5px;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+#strength-text {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    height: 15px;
 }

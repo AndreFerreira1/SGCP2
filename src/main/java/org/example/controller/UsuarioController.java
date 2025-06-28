@@ -6,10 +6,11 @@ import org.example.dao.UsuarioDAO;
 import org.example.model.CadastroRequest;
 import org.example.model.LoginRequest;
 import org.example.model.Usuario;
-import org.mindrot.jbcrypt.BCrypt;
-
+import org.example.security.SecurityUtil;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Map;
 
 public class UsuarioController extends BaseController implements HttpHandler {
 
@@ -17,66 +18,75 @@ public class UsuarioController extends BaseController implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if ("OPTIONS".equals(exchange.getRequestMethod())) {
-            handleOptions(exchange);
-            return;
-        }
-
         String path = exchange.getRequestURI().getPath();
 
-        if (path.equals("/api/auth/login") && "POST".equals(exchange.getRequestMethod())) {
+        if ("/api/login".equals(path)) {
             handleLogin(exchange);
-        } else if (path.equals("/api/auth/cadastro") && "POST".equals(exchange.getRequestMethod())) {
+        } else if ("/api/register".equals(path)) {
             handleCadastro(exchange);
         } else {
-            sendResponse(exchange, 404, "{\"error\":\"Endpoint de autenticação não encontrado\"}");
+            sendResponse(exchange, 404, "{\"error\":\"Endpoint não encontrado\"}");
         }
     }
 
-    private void handleCadastro(HttpExchange exchange) throws IOException {
+    private void handleLogin(HttpExchange exchange) throws IOException {
+        if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+            sendResponse(exchange, 405, "{\"error\":\"Método não permitido\"}");
+            return;
+        }
+
         try {
             String requestBody = readRequestBody(exchange.getRequestBody());
-            CadastroRequest req = gson.fromJson(requestBody, CadastroRequest.class);
+            LoginRequest req = gson.fromJson(requestBody, LoginRequest.class);
+            Usuario usuarioDoBanco = usuarioDAO.findByUsername(req.getUsername());
 
-            if (req.getNomeCompleto() == null || req.getEmail() == null || req.getSenha() == null ||
-                    req.getNomeCompleto().trim().isEmpty() || req.getEmail().trim().isEmpty() || req.getSenha().isEmpty()) {
-                sendResponse(exchange, 400, "{\"error\":\"Nome, e-mail e senha são obrigatórios\"}");
-                return;
+            if (usuarioDoBanco == null) {
+                sendResponse(exchange, 401, "{\"error\":\"Usuário não encontrado.\"}");
+            } else if (SecurityUtil.checkPassword(req.getPassword(), usuarioDoBanco.getPassword())) {
+                String token = SecurityUtil.generateToken(usuarioDoBanco);
+                Map<String, String> response = Collections.singletonMap("token", token);
+                sendResponse(exchange, 200, gson.toJson(response));
+            } else {
+                sendResponse(exchange, 401, "{\"error\":\"Senha incorreta.\"}");
             }
-
-            if (usuarioDAO.findByEmail(req.getEmail()) != null) {
-                sendResponse(exchange, 409, "{\"error\":\"Este e-mail já está cadastrado\"}");
-                return;
-            }
-
-            String senhaHash = BCrypt.hashpw(req.getSenha(), BCrypt.gensalt());
-            Usuario novoUsuario = new Usuario();
-            novoUsuario.setNomeCompleto(req.getNomeCompleto());
-            novoUsuario.setEmail(req.getEmail());
-            novoUsuario.setSenhaHash(senhaHash);
-            usuarioDAO.save(novoUsuario);
-
-            sendResponse(exchange, 201, "{\"message\":\"Usuário cadastrado com sucesso!\"}");
-
         } catch (Exception e) {
             e.printStackTrace();
             sendResponse(exchange, 500, "{\"error\":\"Ocorreu um erro interno no servidor\"}");
         }
     }
 
-    private void handleLogin(HttpExchange exchange) throws IOException {
+    private void handleCadastro(HttpExchange exchange) throws IOException {
+        if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+            sendResponse(exchange, 405, "{\"error\":\"Método não permitido\"}");
+            return;
+        }
+
         try {
             String requestBody = readRequestBody(exchange.getRequestBody());
-            LoginRequest req = gson.fromJson(requestBody, LoginRequest.class);
+            CadastroRequest req = gson.fromJson(requestBody, CadastroRequest.class);
 
-            Usuario usuario = usuarioDAO.findByEmail(req.getUsername());
-
-            if (usuario != null && BCrypt.checkpw(req.getPassword(), usuario.getSenhaHash())) {
-                String response = gson.toJson(Collections.singletonMap("message", "Login bem-sucedido"));
-                sendResponse(exchange, 200, response);
-            } else {
-                sendResponse(exchange, 401, "{\"error\":\"E-mail ou senha inválidos\"}");
+            if (req.getEmail() == null || req.getSenha() == null || req.getEmail().trim().isEmpty() || req.getSenha().isEmpty()) {
+                sendResponse(exchange, 400, "{\"error\":\"E-mail e senha são obrigatórios\"}");
+                return;
             }
+
+            if (usuarioDAO.findByUsername(req.getEmail()) != null) {
+                sendResponse(exchange, 409, "{\"error\":\"Este e-mail já está cadastrado\"}");
+                return;
+            }
+
+            Usuario usuarioParaSalvar = new Usuario();
+            usuarioParaSalvar.setUsername(req.getEmail());
+            String senhaHash = SecurityUtil.hashPassword(req.getSenha());
+            usuarioParaSalvar.setPassword(senhaHash);
+            usuarioParaSalvar.setPerfil("USUARIO");
+
+            usuarioDAO.save(usuarioParaSalvar);
+
+            sendResponse(exchange, 201, "{\"message\":\"Usuário cadastrado com sucesso!\"}");
+
+        } catch (SQLException e) {
+            sendResponse(exchange, 409, "{\"error\":\"Erro de SQL, possível usuário duplicado.\"}");
         } catch (Exception e) {
             e.printStackTrace();
             sendResponse(exchange, 500, "{\"error\":\"Ocorreu um erro interno no servidor\"}");

@@ -4,7 +4,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.example.dao.PedidoDAO;
 import org.example.model.Pedido;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

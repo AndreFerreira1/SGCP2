@@ -3,33 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGCP - Início</title>
+    <title>SGCP - Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header>
     <div class="icon-logo"></div>
-    <h1>Sistema Gerenciador de Clientes e Pedidos (SGCP)</h1>
+    <h1>Sistema Gerenciador de Clientes e Pedidos</h1>
 </header>
-<nav>
-    <a href="index.html" class="active">Início</a>
-</nav>
+<nav><a href="index.html" >Início</a></nav>
 <main class="main-index">
     <section id="imgfundo">
-        <div class="img-form">
-            <div class="text">
-                <h2>Bem-vindo!</h2>
-                <h1>Acesse com suas credenciais ou cadastre-se.</h1>
-                <h1>Nosso sistema permite o cadastro, consulta, atualização e remoção de dados de clientes e seus respectivos pedidos.</h1>
-            </div>
+        <div class="text">
+            <h2>Bem-vindo!</h2>
+            <h1>Acesse com suas credenciais ou cadastre-se.</h1>
         </div>
     </section>
     <section id="form-login">
-        <form id="loginForm" class="form" method="post">
+        <form id="loginForm" class="form">
             <h2>Acesse o sistema</h2>
             <div class="content-input">
-                <label class="label" for="email">E-mail:</label>
-                <input id="email" name="email" type="email" required>
+                <label class="label" for="email">E-mail (Username):</label>
+                <input id="email" name="username" type="email" required>
             </div>
             <div class="content-input">
                 <label class="label" for="password">Senha:</label>
@@ -44,9 +39,7 @@
         </form>
     </section>
 </main>
-<footer>
-    <p>&copy; 2025 - Sistema Gerenciador de Clientes e Pedidos</p>
-</footer>
+<footer><p>&copy; 2025 - SGCP</p></footer>
 <script src="js/app.js"></script>
 </body>
 </html>

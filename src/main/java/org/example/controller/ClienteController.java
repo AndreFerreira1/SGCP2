@@ -4,7 +4,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.example.dao.ClienteDAO;
 import org.example.model.Cliente;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,10 +20,10 @@ public class ClienteController extends BaseController implements HttpHandler {
         }
 
         try {
-            String path = exchange.getRequestURI().getPath().replace("/api/clientes", "");
+            String path = exchange.getRequestURI().getPath().substring(exchange.getHttpContext().getPath().length());
             String method = exchange.getRequestMethod();
 
-            if (path.equals("/") || path.isEmpty()) {
+            if (path.isEmpty() || path.equals("/")) {
                 if ("GET".equals(method)) {
                     List<Cliente> clientes = clienteDAO.getAllClientes();
                     sendResponse(exchange, 200, gson.toJson(clientes));
@@ -34,9 +33,9 @@ public class ClienteController extends BaseController implements HttpHandler {
                     Cliente novoCliente = clienteDAO.addCliente(cliente);
                     sendResponse(exchange, 201, gson.toJson(novoCliente));
                 } else {
-                    sendResponse(exchange, 405, "{\"error\":\"Método não permitido para /api/clientes/\"}");
+                    sendResponse(exchange, 405, "{\"error\":\"Método não permitido\"}");
                 }
-            } else if (path.matches("^/\\d+$")) {
+            } else {
                 int clienteId = Integer.parseInt(path.substring(1));
 
                 if ("GET".equals(method)) {
@@ -51,32 +50,27 @@ public class ClienteController extends BaseController implements HttpHandler {
                     Cliente cliente = gson.fromJson(requestBody, Cliente.class);
                     cliente.setId(clienteId);
                     boolean success = clienteDAO.updateCliente(cliente);
-                    if (success) {
-                        sendResponse(exchange, 200, gson.toJson(cliente));
-                    } else {
-                        sendResponse(exchange, 404, "{\"error\":\"Cliente não encontrado para atualização\"}");
-                    }
+                    sendResponse(exchange, success ? 200 : 404, success ? gson.toJson(cliente) : "{\"error\":\"Cliente não encontrado para atualização\"}");
                 } else if ("DELETE".equals(method)) {
-                    boolean success = clienteDAO.deleteCliente(clienteId);
-                    if (success) {
-                        sendResponse(exchange, 200, "{\"message\":\"Cliente deletado com sucesso\"}");
-                    } else {
-                        sendResponse(exchange, 404, "{\"error\":\"Cliente não encontrado para deleção\"}");
+                    String perfil = (String) exchange.getAttribute("perfil");
+                    if (!"ADMIN".equals(perfil)) {
+                        sendResponse(exchange, 403, "{\"error\":\"Acesso negado. Permissão de administrador necessária.\"}");
+                        return;
                     }
+                    boolean success = clienteDAO.deleteCliente(clienteId);
+                    sendResponse(exchange, success ? 200 : 404, success ? "{\"message\":\"Cliente deletado com sucesso\"}" : "{\"error\":\"Cliente não encontrado\"}");
                 } else {
-                    sendResponse(exchange, 405, "{\"error\":\"Método não permitido para /api/clientes/{id}\"}");
+                    sendResponse(exchange, 405, "{\"error\":\"Método não permitido\"}");
                 }
-            } else {
-                sendResponse(exchange, 404, "{\"error\":\"Endpoint de cliente não encontrado\"}");
             }
         } catch (NumberFormatException e) {
-            sendResponse(exchange, 400, "{\"error\":\"ID do cliente inválido na URL.\"}");
+            sendResponse(exchange, 400, "{\"error\":\"ID de cliente inválido\"}");
         } catch (SQLException e) {
             e.printStackTrace();
-            sendResponse(exchange, 500, "{\"error\":\"Erro interno do servidor ao acessar o banco de dados.\"}");
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(exchange, 500, "{\"error\":\"Ocorreu um erro inesperado.\"}");
+            sendResponse(exchange, 500, "{\"error\":\"Erro de banco de dados\"}");
+        } catch (Throwable t) {
+            t.printStackTrace();
+            sendResponse(exchange, 500, "{\"error\":\"Ocorreu um erro fatal e inesperado no servidor.\"}");
         }
     }
 }

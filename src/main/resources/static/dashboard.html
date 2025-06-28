@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SGCP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header>
+    <div class="icon-logo"></div>
+    <h1>Sistema Gerenciador de Clientes e Pedidos</h1>
+</header>
+<nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Gerenciar Clientes</a>
+    <a href="pedidos.html">Gerenciar Pedidos</a>
+    <a href="relatorio_pedidos_clientes.html">Relatório Pedidos/Clientes</a>
+</nav>
+<main>
+    <section class="dashboard-grid">
+        <div class="kpi-card">
+            <h3>Faturamento no Mês</h3><p id="kpi-faturamento">R$ 0,00</p>
+        </div>
+        <div class="kpi-card">
+            <h3>Novos Clientes (Mês)</h3><p id="kpi-novos-clientes">0</p>
+        </div>
+        <div class="kpi-card">
+            <h3>Pedidos Pendentes</h3><p id="kpi-pedidos-pendentes">0</p>
+        </div>
+    </section>
+    <section class="dashboard-grid">
+        <div class="chart-container">
+            <h3>Pedidos por Status</h3><canvas id="graficoStatus"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Faturamento Mensal</h3><canvas id="graficoFaturamento"></canvas>
+        </div>
+    </section>
+</main>
+<footer><p>&copy; 2025 - SGCP</p></footer>
+<script src="js/app.js"></script>
+</body>
+</html>

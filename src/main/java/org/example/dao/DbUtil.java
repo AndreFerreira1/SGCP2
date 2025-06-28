@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.stream.Collectors;
 
 public class DbUtil {
-
     private static final String JDBC_URL = "jdbc:h2:mem:sgcp_db;DB_CLOSE_DELAY=-1";
     private static final String JDBC_USER = "sa";
     private static final String JDBC_PASSWORD = "";
@@ -19,9 +18,9 @@ public class DbUtil {
         try {
             Class.forName("org.h2.Driver");
             initializeDatabase();
-        } catch (ClassNotFoundException e) {
-            System.err.println("Driver H2 não encontrado: " + e.getMessage());
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Falha ao inicializar o banco de dados", e);
         }
     }
 
@@ -31,18 +30,16 @@ public class DbUtil {
 
     private static void initializeDatabase() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-            InputStream inputStream = DbUtil.class.getResourceAsStream("/db/schema.sql");
-            if (inputStream == null) {
-                System.err.println("Não foi possível encontrar o arquivo schema.sql");
+            InputStream is = DbUtil.class.getResourceAsStream("/db/schema.sql");
+            if (is == null) {
+                System.err.println("Arquivo schema.sql não encontrado.");
                 return;
             }
-            String schemaSql = new BufferedReader(new InputStreamReader(inputStream))
-                    .lines().collect(Collectors.joining("\n"));
+            String schemaSql = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
             stmt.execute(schemaSql);
             System.out.println("Banco de dados inicializado com sucesso.");
         } catch (SQLException e) {
-            System.err.println("Erro ao inicializar o banco de dados: " + e.getMessage());
-
+            System.err.println("Erro ao inicializar o banco: " + e.getMessage());
         }
     }
 }

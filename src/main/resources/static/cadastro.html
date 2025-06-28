@@ -9,38 +9,38 @@
 <body>
 <header>
     <div class="icon-logo"></div>
-    <h1>Sistema Gerenciador de Clientes e Pedidos (SGCP)</h1>
+    <h1>Sistema Gerenciador de Clientes e Pedidos</h1>
 </header>
-<nav>
-    <a href="index.html">Início</a>
-</nav>
+<nav><a href="index.html">Início</a></nav>
 <main class="main-index">
     <section id="imgfundo">
-        <div class="img-form">
-            <div class="text">
-                <h2>Crie sua conta</h2>
-                <h1>Preencha os campos ao lado para se cadastrar.</h1>
-            </div>
+        <div class="text">
+            <h2>Crie sua conta</h2>
+            <h1>Preencha os campos para se cadastrar com segurança.</h1>
         </div>
     </section>
     <section id="form-login">
-        <form id="cadastroForm" class="form" method="post">
+        <form id="cadastroForm" class="form">
             <h2>Crie sua conta</h2>
             <div class="content-input">
                 <label class="label" for="name">Nome Completo:</label>
-                <input id="name" name="username" type="text" required>
+                <input id="name" type="text" required>
             </div>
             <div class="content-input">
-                <label class="label" for="email">E-mail:</label>
-                <input id="email" name="email" type="email" required>
+                <label class="label" for="email">E-mail (será seu username):</label>
+                <input id="email" type="email" required>
             </div>
             <div class="content-input">
                 <label class="label" for="password">Senha:</label>
-                <input id="password" name="password" type="password" required>
+                <input id="password" type="password" required>
+            </div>
+            <div id="password-strength-meter">
+                <div id="strength-bar" class="strength-bar"></div>
+                <p id="strength-text"></p>
             </div>
             <div class="content-input">
                 <label class="label" for="confirm-password">Confirme sua senha:</label>
-                <input id="confirm-password" name="confirm-password" type="password" required>
+                <input id="confirm-password" type="password" required>
             </div>
             <div class="btn">
                 <button class="button-submit" type="submit">Cadastrar</button>
@@ -51,9 +51,7 @@
         </form>
     </section>
 </main>
-<footer>
-    <p>&copy; 2025 - Sistema Gerenciador de Clientes e Pedidos</p>
-</footer>
+<footer><p>&copy; 2025 - SGCP</p></footer>
 <script src="js/app.js"></script>
 </body>
 </html>
