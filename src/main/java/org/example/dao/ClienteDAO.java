@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    // Métodos completos do ClienteDAO, incluindo addCliente com data e countNovosClientesNoMes
+    
     public Cliente addCliente(Cliente cliente) throws SQLException {
         String sql = "INSERT INTO CLIENTES (nome, email, telefone, data_cadastro) VALUES (?, ?, ?, ?)";
         try (Connection conn = DbUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
